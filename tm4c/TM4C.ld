@@ -24,7 +24,7 @@ SECTIONS
 {
   .text :
   {
-    LONG(0x20003fff) /* the stack location */
+    LONG(0x20003ff8) /* the stack location */
     KEEP(*(.nvic))
     *(.text*)
     *(.rodata*)
