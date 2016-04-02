@@ -239,14 +239,27 @@ void __int_handler(void)
 
 extern void main();
 
+#define CPAC_REG (*(volatile unsigned long *)0xe000ed88)
+
 void __rst_handler()
 {
+  //----------------------------------------------------------------------------
+  // Copy the required data to RAM
+  //----------------------------------------------------------------------------
   unsigned long *src = &__text_end_vma;
   unsigned long *dst = &__data_start_vma;
 
   while(dst < &__data_end_vma) *dst++ = *src++;
   dst = &__bss_start_vma;
   while(dst < &__bss_end_vma) *dst++ = 0;
+
+  //----------------------------------------------------------------------------
+  // Set permissions to the floating point coprocessor
+  //----------------------------------------------------------------------------
+  CPAC_REG |= (0x0f << 20);
+  __asm__ volatile (
+    "dsb\r\n"        // force memory writes before continuing
+    "isb\r\n" );     // reset the pipeline
 
   main();
 }
