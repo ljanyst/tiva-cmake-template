@@ -28,7 +28,13 @@ SECTIONS
     KEEP(*(.nvic))
     *(.text*)
     *(.rodata*)
-     __text_end_vma = .;
+  } > FLASH
+
+  .ARM.exidx :
+  {
+    *(.ARM.exidx*)
+    *(.gnu.linkonce.armexidx*)
+    __text_end_vma = .;
   } > FLASH
 
   .data :
@@ -46,4 +52,10 @@ SECTIONS
     *(COMMON)	/* non-ISO C bulshit, just in case */
     __bss_end_vma = .;
   } > RAM
+
+  /DISCARD/ :
+  {
+    *(.init*)
+    *(.fini*)
+  }
 }
