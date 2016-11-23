@@ -51,7 +51,6 @@ void init_sys_tick()
 void init_gpio()
 {
   volatile unsigned long delay;
-  (void)delay;
 
   // Enable the high performance bus (AHB) for Port F.
   GPIOHBCTL_REG |= 0x20;
@@ -62,6 +61,7 @@ void init_gpio()
   // Do something to wait a couple cycles until the clock settles. We fetch
   // the value of the register to give it enough time.
   delay = RCGCGPIO_REG;
+  (void)delay;
 
   // Additional protection is provided for pins that can be used as JTAG and
   // NMI. One of these pins is PF0 which we want to use because it connects to
